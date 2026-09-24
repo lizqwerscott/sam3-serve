@@ -15,7 +15,7 @@ def main() -> None:
     parser.add_argument("--boxes", default=None, help='JSON boxes, e.g. "[[10,20,100,200]]"')
     parser.add_argument("--device", default="auto", help="auto | cuda | mps | cpu")
     parser.add_argument("--dtype", default="auto", help="auto | bfloat16 | float16 | float32")
-    parser.add_argument("--model-dir", default="./sam3")
+    parser.add_argument("--model-dir", default="./models/sam3")
     parser.add_argument("--runs", type=int, default=1)
     parser.add_argument("--save", default=None, help="save the overlay image here")
     args = parser.parse_args()

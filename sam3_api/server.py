@@ -15,7 +15,7 @@ STATE: dict = {}
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    model_dir = os.getenv("SAM3_MODEL_DIR", "./sam3")
+    model_dir = os.getenv("SAM3_MODEL_DIR", "./models/sam3")
     STATE["engine"] = Sam3Engine(model_dir)
     info = STATE["engine"].info()
     print(f"[sam3-api] model loaded: device={info['device']} dtype={info['dtype']} params={info['params_m']}M")

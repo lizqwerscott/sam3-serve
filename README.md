@@ -1,4 +1,4 @@
-# SAM3 Segmentation Service
+# sam3-serve
 
 Runs Meta's [SAM 3](https://huggingface.co/facebook/sam3) on images and exposes it both as a **CLI**
 and as a **FastAPI HTTP service**. Both prompt styles are supported:
@@ -17,7 +17,7 @@ memory cost.
 ## Layout
 
 ```
-sam3/           downloaded model weights (gitignored)
+models/sam3/    downloaded model weights (gitignored)
 sam3_api/
   engine.py     Sam3Engine: device/dtype resolution + inference
   server.py     FastAPI app (endpoints)
@@ -49,7 +49,7 @@ uv pip install -e .     # torch is already satisfied, so it will not be reinstal
 ### 3. Download the model
 
 ```bash
-modelscope download --model facebook/sam3 --local_dir ./sam3 \
+modelscope download --model facebook/sam3 --local_dir ./models/sam3 \
   config.json model.safetensors processor_config.json tokenizer.json \
   tokenizer_config.json special_tokens_map.json vocab.json merges.txt configuration.json
 ```
@@ -73,7 +73,7 @@ Overrides: `--device {auto,cuda,mps,cpu}`, `--dtype {auto,bfloat16,float16,float
 python serve.py                 # http://0.0.0.0:8000
 ```
 
-Env vars: `SAM3_HOST`, `SAM3_PORT` (default 8000), `SAM3_MODEL_DIR` (default `./sam3`),
+Env vars: `SAM3_HOST`, `SAM3_PORT` (default 8000), `SAM3_MODEL_DIR` (default `./models/sam3`),
 `SAM3_DEVICE`, `SAM3_DTYPE`, and optional `SAM3_API_KEY` (when set, requests must send
 `Authorization: Bearer <key>`).
 
@@ -83,7 +83,7 @@ Interactive docs: `http://localhost:8000/docs`.
 
 ```bash
 curl http://localhost:8000/health
-# {"status":"ok","model_loaded":true,"device":"cuda","dtype":"bfloat16","params_m":840.4,"model_dir":"./sam3"}
+# {"status":"ok","model_loaded":true,"device":"cuda","dtype":"bfloat16","params_m":840.4,"model_dir":"./models/sam3"}
 ```
 
 ### `POST /segment`

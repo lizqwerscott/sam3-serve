@@ -72,7 +72,7 @@ def _overlay(image: Image.Image, masks: list[np.ndarray]) -> Image.Image:
 class Sam3Engine:
     """Device-agnostic SAM3 wrapper. Runs on CUDA, MPS or CPU."""
 
-    def __init__(self, model_dir: str = "./sam3", device: str | None = None, dtype: str | None = None):
+    def __init__(self, model_dir: str = "./models/sam3", device: str | None = None, dtype: str | None = None):
         self.device = resolve_device(device)
         self.dtype = resolve_dtype(self.device, dtype)
         self.model_dir = model_dir

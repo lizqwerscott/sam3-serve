@@ -1,5 +1,5 @@
 [project]
-name = "sam3"
+name = "sam3-serve"
 version = "0.1.0"
 description = "SAM3 image segmentation service (GPU/CPU) with a FastAPI endpoint"
 readme = "README.md"

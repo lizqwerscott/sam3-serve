@@ -10,7 +10,7 @@ wheels/
 .venv
 
 # Downloaded model weights (via `modelscope download`)
-/sam3/
+/models/
 
 # Generated visualizations
 *.png
