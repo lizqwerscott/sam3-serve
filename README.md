@@ -28,15 +28,16 @@ serve.py        API server entry point
 
 ## Setup
 
-Install the runtime dependencies into `.venv`. PyTorch CPU wheels are pinned through
-`[tool.uv.sources]` in `pyproject.toml`:
+Pick the PyTorch build you want and sync it into `.venv`:
 
 ```bash
-uv sync
+uv sync                                   # CUDA 13.0 (default)
+uv sync --no-default-groups --group cpu   # CPU
 ```
 
-On an NVIDIA box, point `torch`/`torchvision` at the CUDA index instead (e.g.
-`https://download.pytorch.org/whl/cu124`) and re-run `uv lock && uv sync`.
+The accelerator is selected by the `cpu` / `cu130` dependency groups in `pyproject.toml`, each of
+which pulls `torch`/`torchvision` from the matching PyTorch index. For a different CUDA version, add
+another group and index and re-run `uv lock`.
 
 ### Download the model
 

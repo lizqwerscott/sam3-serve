@@ -12,8 +12,6 @@ description = "SAM3 image segmentation service (GPU/CPU) with a FastAPI endpoint
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "torch>=2.4",
-    "torchvision",
     "transformers>=5.0",
     "accelerate",
     "safetensors",
@@ -25,11 +23,41 @@ dependencies = [
     "modelscope",
 ]
 
+# Pick the PyTorch build at sync time:
+#   CUDA: uv sync                              (the `cu130` group is the default)
+#   CPU : uv sync --no-default-groups --group cpu
+[dependency-groups]
+cpu = [
+    "torch>=2.4",
+    "torchvision",
+]
+cu130 = [
+    "torch>=2.4",
+    "torchvision",
+]
+
+[tool.uv]
+default-groups = ["cu130"]
+conflicts = [
+    [{ group = "cpu" }, { group = "cu130" }],
+]
+
+[tool.uv.sources]
+torch = [
+    { index = "pytorch-cpu", group = "cpu" },
+    { index = "pytorch-cu130", group = "cu130" },
+]
+torchvision = [
+    { index = "pytorch-cpu", group = "cpu" },
+    { index = "pytorch-cu130", group = "cu130" },
+]
+
 [[tool.uv.index]]
 name = "pytorch-cpu"
 url = "https://download.pytorch.org/whl/cpu"
 explicit = true
 
-[tool.uv.sources]
-torch = { index = "pytorch-cpu" }
-torchvision = { index = "pytorch-cpu" }
+[[tool.uv.index]]
+name = "pytorch-cu130"
+url = "https://download.pytorch.org/whl/cu130"
+explicit = true
