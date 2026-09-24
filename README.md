@@ -28,33 +28,23 @@ serve.py        API server entry point
 
 ## Setup
 
-### 1. Create the env and install PyTorch for your hardware
+Install the runtime dependencies into `.venv`. PyTorch CPU wheels are pinned through
+`[tool.uv.sources]` in `pyproject.toml`:
 
 ```bash
-uv venv
-
-# CPU only
-uv pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
-
-# NVIDIA GPU (CUDA 12.4) — use the wheel that matches your driver
-uv pip install torch torchvision --index-url https://download.pytorch.org/whl/cu124
+uv sync
 ```
 
-### 2. Install the remaining dependencies
+On an NVIDIA box, point `torch`/`torchvision` at the CUDA index instead (e.g.
+`https://download.pytorch.org/whl/cu124`) and re-run `uv lock && uv sync`.
 
-```bash
-uv pip install -e .     # torch is already satisfied, so it will not be reinstalled
-```
-
-### 3. Download the model
+### Download the model
 
 ```bash
 modelscope download --model facebook/sam3 --local_dir ./models/sam3 \
   config.json model.safetensors processor_config.json tokenizer.json \
   tokenizer_config.json special_tokens_map.json vocab.json merges.txt configuration.json
 ```
-
-`sam3.pt` in the repo is the same weights in a different format — skip it to save ~3.4 GB.
 
 ## CLI
 

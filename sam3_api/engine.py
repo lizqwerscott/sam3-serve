@@ -38,7 +38,12 @@ def resolve_device(preferred: str | None = None) -> str:
 def resolve_dtype(device: str, preferred: str | None = None) -> torch.dtype:
     preferred = (preferred or os.getenv("SAM3_DTYPE") or "auto").lower()
     if preferred != "auto":
-        return getattr(torch, preferred)
+        dtype = getattr(torch, preferred, None)
+        if not isinstance(dtype, torch.dtype):
+            raise ValueError(
+                f"unknown dtype {preferred!r}; expected auto, bfloat16, float16 or float32"
+            )
+        return dtype
     if device.startswith("cuda"):
         return torch.bfloat16 if torch.cuda.is_bf16_supported() else torch.float16
     if device == "mps":

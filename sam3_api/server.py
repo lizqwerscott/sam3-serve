@@ -1,3 +1,4 @@
+import hmac
 import io
 import json
 import os
@@ -30,8 +31,8 @@ def require_key(authorization: str | None = Header(None)) -> None:
     expected = os.getenv("SAM3_API_KEY")
     if not expected:
         return
-    token = (authorization or "").removeprefix("Bearer ").strip()
-    if token != expected:
+    scheme, _, token = (authorization or "").partition(" ")
+    if scheme.lower() != "bearer" or not hmac.compare_digest(token.strip(), expected):
         raise HTTPException(status_code=401, detail="invalid or missing API key")
 
 
@@ -59,11 +60,23 @@ def _parse_boxes(boxes: str | None, box_labels: str | None) -> tuple[list[list[f
         parsed = json.loads(boxes)
     except json.JSONDecodeError as exc:
         raise HTTPException(status_code=422, detail=f"`boxes` must be JSON: {exc}") from exc
-    if not isinstance(parsed, list) or not parsed or not all(len(b) == 4 for b in parsed):
+    if (
+        not isinstance(parsed, list)
+        or not parsed
+        or not all(isinstance(b, (list, tuple)) and len(b) == 4 for b in parsed)
+    ):
         raise HTTPException(status_code=422, detail="`boxes` must be a non-empty list of [x1,y1,x2,y2]")
-    labels = json.loads(box_labels) if box_labels else [1] * len(parsed)
-    if len(labels) != len(parsed):
-        raise HTTPException(status_code=422, detail="`box_labels` length must match `boxes`")
+
+    if not box_labels:
+        return parsed, [1] * len(parsed)
+    try:
+        labels = json.loads(box_labels)
+    except json.JSONDecodeError as exc:
+        raise HTTPException(status_code=422, detail=f"`box_labels` must be JSON: {exc}") from exc
+    if not isinstance(labels, list) or len(labels) != len(parsed):
+        raise HTTPException(status_code=422, detail="`box_labels` must be a list matching `boxes`")
+    if any(label not in (0, 1) for label in labels):
+        raise HTTPException(status_code=422, detail="`box_labels` entries must be 0 (negative) or 1 (positive)")
     return parsed, labels
 
 

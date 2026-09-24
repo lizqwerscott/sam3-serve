@@ -1,3 +1,1 @@
-from sam3_api.server import app
-
-__all__ = ["app"]
+"""SAM3 segmentation service: inference engine, FastAPI app and response schemas."""

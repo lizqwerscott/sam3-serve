@@ -13,7 +13,8 @@ wheels/
 /models/
 
 # Generated visualizations
-*.png
+/data/*.png
+/*.png
 
 # Command Code local config / taste
 .commandcode/
