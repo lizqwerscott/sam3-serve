@@ -1,0 +1,19 @@
+[project]
+name = "sam3"
+version = "0.1.0"
+description = "SAM3 image segmentation service (GPU/CPU) with a FastAPI endpoint"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "torch>=2.4",
+    "torchvision",
+    "transformers>=5.0",
+    "accelerate",
+    "safetensors",
+    "pillow",
+    "numpy",
+    "fastapi",
+    "uvicorn[standard]",
+    "python-multipart",
+    "modelscope",
+]

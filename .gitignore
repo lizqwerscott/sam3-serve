@@ -1,0 +1,19 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Downloaded model weights (via `modelscope download`)
+/sam3/
+
+# Generated visualizations
+*.png
+
+# Command Code local config / taste
+.commandcode/
